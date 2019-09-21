@@ -10,8 +10,8 @@ public class FirstController : MonoBehaviour, SceneController, UserAction {
 
 	UserGUI userGUI;
 
-	public CoastController fromCoast;
-	public CoastController toCoast;
+	public bankController frombank;
+	public bankController tobank;
 	public BoatController boat;
 	private MyCharacterController[] characters;
 
@@ -27,8 +27,8 @@ public class FirstController : MonoBehaviour, SceneController, UserAction {
 		GameObject water = Instantiate (Resources.Load ("Prefabs/river", typeof(GameObject)), water_pos, Quaternion.identity, null) as GameObject;
 		water.name = "river";
 
-		fromCoast = new CoastController ("from");
-		toCoast = new CoastController ("to");
+		frombank = new bankController ("from");
+		tobank = new bankController ("to");
 		boat = new BoatController ();
 
 		loadCharacter ();
@@ -38,9 +38,9 @@ public class FirstController : MonoBehaviour, SceneController, UserAction {
 		for (int i = 0; i < 3; i++) {
 			MyCharacterController cha = new MyCharacterController ("priest");
 			cha.setName("priest" + i);
-			cha.setPosition (fromCoast.getEmptyPosition ());
-			cha.getOnCoast (fromCoast);
-			fromCoast.getOnCoast (cha);
+			cha.setPosition (frombank.getEmptyPosition ());
+			cha.getOnbank (frombank);
+			frombank.getOnbank (cha);
 
 			characters [i] = cha;
 		}
@@ -48,9 +48,9 @@ public class FirstController : MonoBehaviour, SceneController, UserAction {
 		for (int i = 0; i < 3; i++) {
 			MyCharacterController cha = new MyCharacterController ("devil");
 			cha.setName("devil" + i);
-			cha.setPosition (fromCoast.getEmptyPosition ());
-			cha.getOnCoast (fromCoast);
-			fromCoast.getOnCoast (cha);
+			cha.setPosition (frombank.getEmptyPosition ());
+			cha.getOnbank (frombank);
+			frombank.getOnbank (cha);
 
 			characters [i+3] = cha;
 		}
@@ -66,29 +66,29 @@ public class FirstController : MonoBehaviour, SceneController, UserAction {
 
 	public void characterIsClicked(MyCharacterController characterCtrl) {
 		if (characterCtrl.isOnBoat ()) {
-			CoastController whichCoast;
+			bankController whichbank;
 			if (boat.get_to_or_from () == -1) { // to->-1; from->1
-				whichCoast = toCoast;
+				whichbank = tobank;
 			} else {
-				whichCoast = fromCoast;
+				whichbank = frombank;
 			}
 
 			boat.GetOffBoat (characterCtrl.getName());
-			characterCtrl.moveToPosition (whichCoast.getEmptyPosition ());
-			characterCtrl.getOnCoast (whichCoast);
-			whichCoast.getOnCoast (characterCtrl);
+			characterCtrl.moveToPosition (whichbank.getEmptyPosition ());
+			characterCtrl.getOnbank (whichbank);
+			whichbank.getOnbank (characterCtrl);
 
-		} else {									// character on coast
-			CoastController whichCoast = characterCtrl.getCoastController ();
+		} else {									// character on bank
+			bankController whichbank = characterCtrl.getbankController ();
 
 			if (boat.getEmptyIndex () == -1) {		// boat is full
 				return;
 			}
 
-			if (whichCoast.get_to_or_from () != boat.get_to_or_from ())	// boat is not on the side of character
+			if (whichbank.get_to_or_from () != boat.get_to_or_from ())	// boat is not on the side of character
 				return;
 
-			whichCoast.getOffCoast(characterCtrl.getName());
+			whichbank.getOffbank(characterCtrl.getName());
 			characterCtrl.moveToPosition (boat.getEmptyPosition());
 			characterCtrl.getOnBoat (boat);
 			boat.GetOnBoat (characterCtrl);
@@ -102,11 +102,11 @@ public class FirstController : MonoBehaviour, SceneController, UserAction {
 		int to_priest = 0;
 		int to_devil = 0;
 
-		int[] fromCount = fromCoast.getCharacterNum ();
+		int[] fromCount = frombank.getCharacterNum ();
 		from_priest += fromCount[0];
 		from_devil += fromCount[1];
 
-		int[] toCount = toCoast.getCharacterNum ();
+		int[] toCount = tobank.getCharacterNum ();
 		to_priest += toCount[0];
 		to_devil += toCount[1];
 
@@ -114,10 +114,10 @@ public class FirstController : MonoBehaviour, SceneController, UserAction {
 			return 2;
 
 		int[] boatCount = boat.getCharacterNum ();
-		if (boat.get_to_or_from () == -1) {	// boat at toCoast
+		if (boat.get_to_or_from () == -1) {	// boat at tobank
 			to_priest += boatCount[0];
 			to_devil += boatCount[1];
-		} else {	// boat at fromCoast
+		} else {	// boat at frombank
 			from_priest += boatCount[0];
 			from_devil += boatCount[1];
 		}
@@ -132,8 +132,8 @@ public class FirstController : MonoBehaviour, SceneController, UserAction {
 
 	public void restart() {
 		boat.reset ();
-		fromCoast.reset ();
-		toCoast.reset ();
+		frombank.reset ();
+		tobank.reset ();
 		for (int i = 0; i < characters.Length; i++) {
 			characters [i].reset ();
 		}

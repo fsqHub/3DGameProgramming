@@ -56,9 +56,9 @@ namespace Com.Mygame {
 			if (_dest.y == transform.position.y) {	// boat moving
 				moving_status = 2;
 			}
-			else if (_dest.y < transform.position.y) {	// character from coast to boat
+			else if (_dest.y < transform.position.y) {	// character from bank to boat
 				middle.y = transform.position.y;
-			} else {								// character from boat to coast
+			} else {								// character from boat to bank
 				middle.x = transform.position.x;
 			}
 			moving_status = 1;
@@ -79,7 +79,7 @@ namespace Com.Mygame {
 
 		// change frequently
 		bool _isOnBoat;
-		CoastController coastController;
+		bankController bankController;
 
 
 		public MyCharacterController(string which_character) {
@@ -118,13 +118,13 @@ namespace Com.Mygame {
 		}
 
 		public void getOnBoat(BoatController boatCtrl) {
-			coastController = null;
+			bankController = null;
 			character.transform.parent = boatCtrl.getGameobj().transform;
 			_isOnBoat = true;
 		}
 
-		public void getOnCoast(CoastController coastCtrl) {
-			coastController = coastCtrl;
+		public void getOnbank(bankController bankCtrl) {
+			bankController = bankCtrl;
 			character.transform.parent = null;
 			_isOnBoat = false;
 		}
@@ -133,22 +133,22 @@ namespace Com.Mygame {
 			return _isOnBoat;
 		}
 
-		public CoastController getCoastController() {
-			return coastController;
+		public bankController getbankController() {
+			return bankController;
 		}
 
 		public void reset() {
 			moveableScript.reset ();
-			coastController = (Director.getInstance ().currentSceneController as FirstController).fromCoast;
-			getOnCoast (coastController);
-			setPosition (coastController.getEmptyPosition ());
-			coastController.getOnCoast (this);
+			bankController = (Director.getInstance ().currentSceneController as FirstController).frombank;
+			getOnbank (bankController);
+			setPosition (bankController.getEmptyPosition ());
+			bankController.getOnbank (this);
 		}
 	}
 
-	/*-----------------------------------CoastController------------------------------------------*/
-	public class CoastController {
-		readonly GameObject coast;
+	/*-----------------------------------bankController------------------------------------------*/
+	public class bankController {
+		readonly GameObject bank;
 		readonly Vector3 from_pos = new Vector3(9,1,0);
 		readonly Vector3 to_pos = new Vector3(-9,1,0);
 		readonly Vector3[] positions;
@@ -157,19 +157,19 @@ namespace Com.Mygame {
 		// change frequently
 		MyCharacterController[] passengerPlaner;
 
-		public CoastController(string _to_or_from) {
+		public bankController(string _to_or_from) {
 			positions = new Vector3[] {new Vector3(6.5F,4.0f,0), new Vector3(7.5F,4.0f,0), new Vector3(8.5F,4.0f,0), 
 				new Vector3(9.5F,4.0f,0), new Vector3(10.5F,4.0f,0), new Vector3(11.5F,4.0f,0)};
 
 			passengerPlaner = new MyCharacterController[6];
 
 			if (_to_or_from == "from") {
-				coast = Object.Instantiate (Resources.Load ("Prefabs/bank", typeof(GameObject)), from_pos, Quaternion.identity, null) as GameObject;
-				coast.name = "from";
+				bank = Object.Instantiate (Resources.Load ("Prefabs/bank", typeof(GameObject)), from_pos, Quaternion.identity, null) as GameObject;
+				bank.name = "from";
 				to_or_from = 1;
 			} else {
-				coast = Object.Instantiate (Resources.Load ("Prefabs/bank", typeof(GameObject)), to_pos, Quaternion.identity, null) as GameObject;
-				coast.name = "to";
+				bank = Object.Instantiate (Resources.Load ("Prefabs/bank", typeof(GameObject)), to_pos, Quaternion.identity, null) as GameObject;
+				bank.name = "to";
 				to_or_from = -1;
 			}
 		}
@@ -189,12 +189,12 @@ namespace Com.Mygame {
 			return pos;
 		}
 
-		public void getOnCoast(MyCharacterController characterCtrl) {
+		public void getOnbank(MyCharacterController characterCtrl) {
 			int index = getEmptyIndex ();
 			passengerPlaner [index] = characterCtrl;
 		}
 
-		public MyCharacterController getOffCoast(string passenger_name) {	// 0->priest, 1->devil
+		public MyCharacterController getOffbank(string passenger_name) {	// 0->priest, 1->devil
 			for (int i = 0; i < passengerPlaner.Length; i++) {
 				if (passengerPlaner [i] != null && passengerPlaner [i].getName () == passenger_name) {
 					MyCharacterController charactorCtrl = passengerPlaner [i];
@@ -202,7 +202,7 @@ namespace Com.Mygame {
 					return charactorCtrl;
 				}
 			}
-			Debug.Log ("cant find passenger on coast: " + passenger_name);
+			Debug.Log ("cant find passenger on bank: " + passenger_name);
 			return null;
 		}
 
