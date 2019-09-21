@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Com.Mygame;
+using PriestsAndDevils;
 
 public class ClickGUI : MonoBehaviour {
 	UserAction action;

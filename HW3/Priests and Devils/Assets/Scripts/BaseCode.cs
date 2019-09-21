@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Com.Mygame;
+using PriestsAndDevils;
 
-namespace Com.Mygame {
+namespace PriestsAndDevils {
 
 	public class Director : System.Object {
 		private static Director _instance;
