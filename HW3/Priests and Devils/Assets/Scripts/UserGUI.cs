@@ -21,7 +21,7 @@ public class UserGUI : MonoBehaviour {
 	}
 	void OnGUI() {
 		if (status == 1) {
-			GUI.Label(new Rect(Screen.width/2-50, Screen.height/2-85, 100, 50), "Gameover!", style);
+			GUI.Label(new Rect(Screen.width/2-50, Screen.height/2-85, 100, 50), "You Lose!", style);
 			if (GUI.Button(new Rect(Screen.width/2-70, Screen.height/2, 140, 70), "Restart", buttonStyle)) {
 				status = 0;
 				action.restart ();
