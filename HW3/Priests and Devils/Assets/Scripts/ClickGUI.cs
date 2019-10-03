@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using PriestsAndDevils;
 
-public class ClickGUI : MonoBehaviour {
+public class ClickGUI : MonoBehaviour {//小船或者角色被点击时
 	UserAction action;
 	MyCharacterController characterController;
 

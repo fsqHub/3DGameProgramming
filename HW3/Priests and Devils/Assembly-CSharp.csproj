@@ -48,6 +48,7 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\BaseCode.cs" />
      <Compile Include="Assets\Scripts\ClickGUI.cs" />
+     <Compile Include="Assets\Scripts\Control.cs" />
      <Compile Include="Assets\Scripts\FirstController.cs" />
      <Compile Include="Assets\Scripts\UserGUI.cs" />
  <Reference Include="UnityEngine.UI">
