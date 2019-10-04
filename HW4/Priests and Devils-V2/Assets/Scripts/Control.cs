@@ -244,6 +244,8 @@ using PriestsAndDevils;
 				to_or_from = -1;
 			}
 		}
+
+		//新增如下两个函数
 		public Vector3 getBoatDest(){
 			Vector3 pos;
 			if (to_or_from == -1) {

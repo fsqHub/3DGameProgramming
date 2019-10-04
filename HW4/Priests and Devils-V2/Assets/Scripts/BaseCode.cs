@@ -25,10 +25,10 @@ namespace PriestsAndDevils {
 		void characterIsClicked(MyCharacterController characterCtrl);
 		void restart();
 	}
-
+	//新增如下语句
 	public enum SSActionEventType : int { Started, Complete }
 	
-	public interface ISSActionCallback	{   //
+	public interface ISSActionCallback	{   
 		void SSActionEvent(SSAction source,
 		SSActionEventType events = SSActionEventType.Complete,
         int intParam = 0, 

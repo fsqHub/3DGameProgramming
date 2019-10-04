@@ -63,7 +63,7 @@ public class FirstController : MonoBehaviour, SceneController, UserAction {
 	public void moveBoat() {
 		if (boat.isEmpty ())
 			return;
-		//boat.Move ();
+		//boat.Move ();改为如下语句
 		actionManager.moveBoat(boat,boat.getBoatDest(),speed);
 		boat.pos_change();
 
@@ -83,7 +83,7 @@ public class FirstController : MonoBehaviour, SceneController, UserAction {
 
 			boat.GetOffBoat(characterCtrl.getName());
 
-			//characterCtrl.moveToPosition (whichbank.getEmptyPosition ());
+			//characterCtrl.moveToPosition (whichbank.getEmptyPosition ());  改为如下语句
 			Vector3 dest = whichbank.getEmptyPosition ();
 			actionManager.moveChar(characterCtrl,dest,speed);
 
@@ -102,7 +102,7 @@ public class FirstController : MonoBehaviour, SceneController, UserAction {
 
 			whichbank.getOffbank(characterCtrl.getName());
 
-			//characterCtrl.moveToPosition (boat.getEmptyPosition());
+			//characterCtrl.moveToPosition (boat.getEmptyPosition());  改为如下语句
 			Vector3 dest = boat.getEmptyPosition ();//boat,not whichbank
 			actionManager.moveChar(characterCtrl,dest,speed);
 			
