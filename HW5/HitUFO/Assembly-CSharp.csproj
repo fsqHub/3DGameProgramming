@@ -46,12 +46,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\ActionManager.cs" />
-     <Compile Include="Assets\Scripts\BaseCode.cs" />
-     <Compile Include="Assets\Scripts\DiskFactory.cs" />
-     <Compile Include="Assets\Scripts\FirstSceneController.cs" />
-     <Compile Include="Assets\Scripts\ScoreController.cs" />
-     <Compile Include="Assets\Scripts\UserGUI.cs" />
+     <Compile Include="Assets\Scripts\Action\ActionManager.cs" />
+     <Compile Include="Assets\Scripts\Control\FirstSceneController.cs" />
+     <Compile Include="Assets\Scripts\Control\SceneController.cs" />
+     <Compile Include="Assets\Scripts\Model\BaseCode.cs" />
+     <Compile Include="Assets\Scripts\Model\DiskFactory.cs" />
+     <Compile Include="Assets\Scripts\View\UserGUI.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>E:/Unity/Unity5.5.1/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
