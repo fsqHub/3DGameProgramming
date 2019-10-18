@@ -10,21 +10,21 @@ public class UserGUI : MonoBehaviour
     public int score;*/
     public int reset;
     GUIStyle style;
-	GUIStyle buttonStyle;
+    GUIStyle buttonStyle;
    // public ISceneController userAction;直接用可以运行，但是会报错
     // Start is called before the first frame update
     ActionMode mode;
     void Start()
     {
-        reset = 0;
+        reset = 0;//不能一开始就设定为1，否则需要按两下按钮才会消失
         style = new GUIStyle();
-		style.fontSize = 30;
-		//style.alignment = TextAnchor.MiddleCenter;
-		style.normal.textColor = Color.green;// 
+        style.fontSize = 30;
+        //style.alignment = TextAnchor.MiddleCenter;
+        style.normal.textColor = Color.green;// 
 
-		buttonStyle = new GUIStyle("button");
-		buttonStyle.fontSize = 15;
-		buttonStyle.normal.textColor = Color.green;// 
+        buttonStyle = new GUIStyle("button");
+        buttonStyle.fontSize = 15;
+        buttonStyle.normal.textColor = Color.green;// 
         //userAction = Director.getInstance().currentSceneController;//此处挂载失败
 
         mode = ActionMode.PHYSICS;
@@ -41,7 +41,7 @@ public class UserGUI : MonoBehaviour
        
         if(reset == 1){
             /*if(GUI.Button(new Rect(380, 250, 100, 80), "Reset",buttonStyle)){
-            	//userAction.Init();
+                //userAction.Init();
                 Director.getInstance().currentSceneController.Init();
                 reset = 0;
             }*/

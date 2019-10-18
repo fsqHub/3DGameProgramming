@@ -1,22 +1,41 @@
 #### 演示视频：
 
-<https://www.bilibili.com/video/av70593421>
+<<https://www.bilibili.com/video/av71647126/>>
+
+
+
+##### 实验要求：
+
+- 按如下设计图修改飞碟游戏
+- 使它同时支持物理运动与运动学（变换）运动
+
+![2](assets/2-1571401970253.png)
 
 #### 设计说明：
 
-总体结构：
+这一次是在作业5的基础上改进，总体结构并未有太大改变，只是按照要求修改了部分代码。
 
-![5](assets/5.png)
+##### 总体结构：
 
-首先设计好一个飞碟预制，确定其大小属性和颜色（颜色也可不选，之后程序会生成），并且增加physcis中的Rigidbody组件，勾选Use Gravity（使得物体的运动受重力影响）：
+![3](assets/3.png)
+
+其中DiskFactory.cs因为根据model而给出了飞碟的运动属性，所以改归入了Action部分。
+
+在作业5中我们实现的游戏就是既给飞碟初速度，又给飞碟重力作用，现在我们要进行修改，将飞碟预制的Rigidbody组件删除。
+
+作业6飞碟预制属性：
+
+![1](assets/1.png)
+
+作业5飞碟预制属性：
 
 ![1](assets/1-1570542364679.png)
 
-编写BaseCode.cs，其中包含Director类，还有一个储存飞碟属性的类Disk，外加一个场景控制器的接口IScenController
+修改BaseCode.cs。在作业5的基础上，增加一个mode，和一个根据mode控制飞碟飞行属性的接口IActionManager.
 
-![2](../../../Desktop/2.png)
+![4](assets/4.png)
 
-DiskFactory.cs以工厂模式管理飞碟的生产与回收。他会根据回合数生成不同速度和大小的飞碟并设定随机初始位置和初始速度以及在六种颜色中随机选择一种
+DiskFactory.cs新增实现IActionManager接口的功能，将原本设定的所有飞碟皆受重力作用给为仅当mode为PHYSICS时增加Rigidbody（必须保证预制没有添加Rigidbody,如果有则不能成功）和重力作用：
 
 ```go
 using System.Collections;
@@ -24,12 +43,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using PriestsAndDevils;
 // 工厂模式
-public class DiskFactory : MonoBehaviour
+public class DiskFactory : MonoBehaviour, IActionManager
 {
     private List<Disk> toDelete = new List<Disk>();
     private List<Disk> toUse = new List<Disk>();
     public Color[] colors = {Color.white,Color.yellow,Color.red,Color.blue,Color.green,Color.black};//可选颜色
-    public GameObject GetDisk(int round){//根据回合数对飞碟设置属性并返回
+
+   
+    public GameObject GetDisk(int round,ActionMode mode){//根据回合数对飞碟设置属性并返回
         GameObject newDisk = null;
         if (toUse.Count > 0){
             newDisk = toUse[0].gameObject;
@@ -38,7 +59,13 @@ public class DiskFactory : MonoBehaviour
             newDisk = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/disk"), Vector3.zero, Quaternion.identity);
             newDisk.AddComponent<Disk>();
         }
-        // 飞碟的速度为round*7
+        //commonProperities();
+        if (mode == ActionMode.PHYSICS){//如果是PHYSICS模式，增加Rigidbody和重力作用
+            newDisk.AddComponent<Rigidbody>();
+            newDisk.GetComponent<Rigidbody>().AddForce(Vector3.down * 9.8f, ForceMode.Acceleration);
+        }
+
+          // 飞碟的速度为round*7
         newDisk.GetComponent<Disk>().speed = 7.0f * round;
         // 飞碟随round越来越小
         newDisk.GetComponent<Disk>().size = (1 - round*0.1f);
@@ -75,7 +102,7 @@ public class DiskFactory : MonoBehaviour
 }
 ```
 
-ActionManager.cs管理场景的动作：管理飞碟的运动以及与用户交互：每当有光标拾取到飞碟时，分数加一，飞碟消失。
+ActionManager.cs（没有改变）管理场景的动作：管理飞碟的运动以及与用户交互：每当有光标拾取到飞碟时，分数加一，飞碟消失。
 
 ```go
 using System.Collections;
@@ -138,7 +165,7 @@ public class ActionManager : MonoBehaviour
 }
 ```
 
-SceneController.cs作为场景控制器控制游戏的输出信息：回合数，总飞碟数，所得分数
+SceneController.cs（没有改变）作为场景控制器控制游戏的输出信息：回合数，总飞碟数，所得分数
 
 ```go
 public class SceneController{
@@ -185,7 +212,7 @@ public class SceneController{
 
 
 
-FirstSceneController.cs作为第一场景控制器，负责控制游戏场景的加载和切换。
+FirstSceneController.cs增加mode作为成员变量，并将其传递给DiskFactory的GetDisk()函数生成所需的飞碟。
 
 ```go
 using System.Collections;
@@ -219,9 +246,25 @@ public class FirstSceneController : MonoBehaviour, ISceneController{
     public int diskFlyTimes; //已经发射的飞碟个数，每回合10个，最多30个
     public float time;// 时间，用于控制飞碟发射间隔
     public int round;  // 当前回合数
+    public ActionMode mode;//模式选择
+
     // 飞碟队列
     public Queue<GameObject> diskQueue = new Queue<GameObject>();//飞碟队列
     public SceneController  sceneCtrl;
+    
+
+    public ActionMode getMode() 
+    {
+        return mode; 
+    }
+
+    public void setMode(ActionMode m)
+    {
+        //if (m == ActionMode.KINEMATIC) this.gameObject.AddComponent<CCActionManager>();
+    //    else this.gameObject.AddComponent<PhysicActionManager>();
+        mode = m;
+    }
+
 
     // Start is called before the first frame update
     void Start(){
@@ -230,12 +273,16 @@ public class FirstSceneController : MonoBehaviour, ISceneController{
         this.gameObject.AddComponent<DiskFactory>();
         this.gameObject.AddComponent<UserGUI>();
         Director.getInstance().currentSceneController.Init();//初始化FirstSceneController相关数据
+
+        mode = ActionMode.PHYSICS;
     }
 
     // 初始化每个回合的飞碟队列,每个回合的飞碟属性不同
     void initQueue(){
+        diskQueue.Clear();//clear first
+
         for(int i = 0;i < 10;i ++)
-            diskQueue.Enqueue(Singleton<DiskFactory>.Instance.GetDisk(round));
+            diskQueue.Enqueue(Singleton<DiskFactory>.Instance.GetDisk(round,getMode()));
     }
 
     // Update is called once per frame
@@ -289,18 +336,18 @@ public class FirstSceneController : MonoBehaviour, ISceneController{
         round = 0;
         diskQueue.Clear();//清空飞盘队列
     }
-    public SceneController  getSceneController(){//返回SceneController
+    public SceneController  getSceneController(){
         return sceneCtrl;
     }
     void Reset()
-    {//游戏重置
+    {
         this.gameObject.GetComponent<UserGUI>().reset = 1;
     }
 
 }
 ```
 
-UserGUI.cs负责输出提示信息，包括回合数Round，未击中飞碟数Miss,分数Score,以及在游戏结束时输出重新开始的按钮
+UserGUI.cs新增模式选择功能：
 
 ```go
 using System.Collections;
@@ -318,55 +365,70 @@ public class UserGUI : MonoBehaviour
 	GUIStyle buttonStyle;
    // public ISceneController userAction;直接用可以运行，但是会报错
     // Start is called before the first frame update
+    ActionMode mode;
     void Start()
     {
-        /*round = 0;
-        total = 0;
-        score = 0;*/
-        reset = 0;
+        reset = 0;//不能一开始就设定为1，否则需要按两下按钮才会消失
         style = new GUIStyle();
 		style.fontSize = 30;
 		//style.alignment = TextAnchor.MiddleCenter;
 		style.normal.textColor = Color.green;// 
 
 		buttonStyle = new GUIStyle("button");
-		buttonStyle.fontSize = 30;
+		buttonStyle.fontSize = 15;
 		buttonStyle.normal.textColor = Color.green;// 
         //userAction = Director.getInstance().currentSceneController;//此处挂载失败
+
+        mode = ActionMode.PHYSICS;
     }
 
     // Update is called once per frame
     void Update()
     {
-       /*round = userAction.getSceneController().getRound();
-        total = userAction.getSceneController().getTotal();
-        score = userAction.getSceneController().getScore();*/
+       
     }
 
     private void OnGUI()
     {
+       
         if(reset == 1){
-            if(GUI.Button(new Rect(380, 250, 100, 80), "Reset",buttonStyle)){
+            /*if(GUI.Button(new Rect(380, 250, 100, 80), "Reset",buttonStyle)){
             	//userAction.Init();
                 Director.getInstance().currentSceneController.Init();
                 reset = 0;
+            }*/
+            
+           if(GUI.Button(new Rect(200, 250, 100, 80), "KINEMATIC",buttonStyle)){
+                mode = ActionMode.KINEMATIC;
+                Director.getInstance().currentSceneController.setMode(mode);
+                Director.getInstance().currentSceneController.Init();
+                reset = 0;
+                return;
             }
+            if(GUI.Button(new Rect(400, 250, 100, 80), "PHYSICS",buttonStyle)){
+                mode = ActionMode.PHYSICS;
+                Director.getInstance().currentSceneController.setMode(mode);
+                Director.getInstance().currentSceneController.Init();
+                reset = 0;
+                return;
+            } 
+           // else mode = ActionMode.PHYSICS;
+            
+            
         }
 
-        int round = Director.getInstance().currentSceneController.getSceneController().getRound();
-        int total = Director.getInstance().currentSceneController.getSceneController().getTotal();
-        int score = Director.getInstance().currentSceneController.getSceneController().getScore();
-        int miss = total - score;//未击中的飞碟数
-        //string text = "Round: " + userAction.getSceneController().GetRound().ToString() + "\nTotal:  " + total.ToString() + "\nScores:  " + score.ToString();
-        string text = "Round: " + round.ToString() + "\nMiss:  " + miss.ToString() + "\nScores:  " + score.ToString();
-        GUI.Label(new Rect(10, 10, Screen.width, 50),text,style);      
+        if (reset == 0){
+           
+            int round = Director.getInstance().currentSceneController.getSceneController().getRound();
+            int total = Director.getInstance().currentSceneController.getSceneController().getTotal();
+            int score = Director.getInstance().currentSceneController.getSceneController().getScore();
+            int miss = total - score;//未击中的飞碟数
+            //string text = "Round: " + userAction.getSceneController().GetRound().ToString() + "\nTotal:  " + total.ToString() + "\nScores:  " + score.ToString();
+            string text = "Round: " + round.ToString() + "\nMiss:  " + miss.ToString() + "\nScores:  " + score.ToString();
+            GUI.Label(new Rect(10, 10, Screen.width, 50),text,style); 
+
+        }     
     }
 
 }
 ```
-
-
-
-#### 参考资料
-
-<https://blog.csdn.net/x2_yt/article/details/66969242>
