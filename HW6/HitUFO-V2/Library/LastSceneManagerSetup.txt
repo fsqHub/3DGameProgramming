@@ -1,0 +1,4 @@
+sceneSetups:
+- path: F:/QQPCMove/GitHome/3DGameProgramming/HW5/HitUFO/Assets/HitUFO.unity
+  isLoaded: 1
+  isActive: 1

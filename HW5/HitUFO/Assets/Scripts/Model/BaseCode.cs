@@ -26,6 +26,7 @@ namespace PriestsAndDevils {
 	public interface ISceneController {		//加载场景
 		void Init ();
 		SceneController  getSceneController();
+		//initQueue(mode)
 	}
 
 	
