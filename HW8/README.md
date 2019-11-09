@@ -1,6 +1,6 @@
 #### 演示视频：https://www.bilibili.com/video/av75083030/>
 
-#### 项目代码：
+#### 项目代码：<https://github.com/Passenger0/3DGameProgramming/tree/master/HW8/PaticleSystem/Assets>
 
 #### 效果演示：
 
@@ -137,8 +137,8 @@ Materials中是粒子的颜色Material,Prefabs是一个不带UserGUI.cs脚本的
           		if (pDatas[i].CurRadius > (0.6f * pDatas[i].iniRadius)){
           			pDatas[i].CurRadius -= tranSpeed * Time.deltaTime;
           		}
-          	}else if (flag == 2){ //光环半径变为初始值的1.6，是一个渐变过程
-          		if (pDatas[i].CurRadius < (1.6f * pDatas[i].iniRadius)){
+          	}else if (flag == 2){ //光环半径变为初始值的1.4，是一个渐变过程
+          		if (pDatas[i].CurRadius < (1.4f * pDatas[i].iniRadius)){
           			pDatas[i].CurRadius += tranSpeed * Time.deltaTime;
           		}
           	}
@@ -187,7 +187,7 @@ Materials中是粒子的颜色Material,Prefabs是一个不带UserGUI.cs脚本的
 
   ​		index = 1，newHalos[0]半径逐渐减小到Halo的0.6；
 
-  ​		index = 2，newHalos[1]半径逐渐增大到Halo的1.6；
+  ​		index = 2，newHalos[1]半径逐渐增大到Halo的1.4；
 
   ​		index = 0，则两个光环都逐渐回到Halo初始位置；
 
@@ -241,5 +241,5 @@ Materials中是粒子的颜色Material,Prefabs是一个不带UserGUI.cs脚本的
    }
   ```
 
-将UserGUI.cs挂载到空对象Halo上（预制Halo上不需要，否则会出现毒哦额GUI重合，造成功能异常），这样在游戏加载完成后就会有一个较为浓密的光环在屏幕中间（其实是3个光环在同一位置）。第一次点击Split后会有一个较小的光环从中逐渐分离出来，直到半径为初始光环的0.6；再次点击Split后，又会有另外一个较大的光环从初始光环中分离出来，半径为初始光环的1.6；第三次点击后最大的光环和最小的光环都将逐渐回到初始位置，以此循环。Reset则将使得光环瞬间恢复到初始状态。
+将UserGUI.cs挂载到空对象Halo上（预制Halo上不需要，否则会出现毒哦额GUI重合，造成功能异常），这样在游戏加载完成后就会有一个较为浓密的光环在屏幕中间（其实是3个光环在同一位置）。第一次点击Split后会有一个较小的光环从中逐渐分离出来，直到半径为初始光环的0.6；再次点击Split后，又会有另外一个较大的光环从初始光环中分离出来，半径为初始光环的1.4；第三次点击后最大的光环和最小的光环都将逐渐回到初始位置，以此循环。Reset则将使得光环瞬间恢复到初始状态。
 

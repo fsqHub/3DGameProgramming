@@ -74,7 +74,7 @@ public class PHalo : MonoBehaviour
         			pDatas[i].CurRadius -= tranSpeed * Time.deltaTime;
         		}
         	}else if (flag == 2){ //光环半径变为原来的1.6，，是一个渐变过程
-        		if (pDatas[i].CurRadius < (1.6f * pDatas[i].iniRadius)){
+        		if (pDatas[i].CurRadius < (1.4f * pDatas[i].iniRadius)){
         			pDatas[i].CurRadius += tranSpeed * Time.deltaTime;
         		}
         	}
