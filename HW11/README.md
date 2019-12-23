@@ -187,4 +187,4 @@ public class ButtonEvent : MonoBehaviour, IVirtualButtonEventHandler
 
 ```
 
-然后就实现了演示视频（https://www.bilibili.com/video/av80406089/）里的效果了
+然后就实现了演示视频（https://www.bilibili.com/video/av80406089/） 里的效果了
