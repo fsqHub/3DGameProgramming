@@ -61,7 +61,7 @@
 
 然后将创建好的数据库下载下来（unity package文件）。
 
-## 完成AR小程序
+## 2. 完成AR小程序
 
 新建unity项目，file->buidl setting->player settings，在XR settings中勾选 Vuforia Augmented Reality。
 
