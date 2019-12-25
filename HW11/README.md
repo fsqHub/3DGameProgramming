@@ -79,7 +79,11 @@
 
 ![011](assets/011.png)
 
-接着为项目增加一个Image Target：GameObject->Vuforia  Engine->Image(组件名称为image，但是增加后默认名称为Image Target)，将Image Target Behaviour中Type设置为From Database,使用相应的数据库和Target
+接着为项目增加一个Image Target：GameObject->Vuforia  Engine->Image(组件名称为image，但是增加后默认名称为Image Target)。
+
+![20191217202748246_meitu_1](assets/20191217202748246_meitu_1.jpg)
+
+将Image Target Behaviour中Type设置为From Database,使用相应的数据库和Target
 
 ![012](assets/012.png)
 
